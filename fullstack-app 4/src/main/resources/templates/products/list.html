@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>Products</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+<div class="container">
+    <div class="page-header">
+        <h1>Products</h1>
+        <a th:href="@{/products/new}" class="btn btn-primary" sec:authorize="hasAuthority('ROLE_ADMIN')">+ Add Product</a>
+    </div>
+
+    <form th:action="@{/products}" method="get" class="search-form">
+        <input type="text" name="keyword" placeholder="Search by name..." th:value="${keyword}">
+        <button type="submit" class="btn btn-secondary">Search</button>
+    </form>
+
+    <table class="data-table">
+        <thead>
+        <tr>
+            <th>Name</th>
+            <th>Category</th>
+            <th>Price</th>
+            <th>Quantity</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="product : ${products}">
+            <td><a th:href="@{/products/{id}(id=${product.id})}" th:text="${product.name}"></a></td>
+            <td th:text="${product.category}"></td>
+            <td th:text="${'$' + product.price}"></td>
+            <td th:text="${product.quantity}"></td>
+            <td class="actions">
+                <a th:href="@{/products/edit/{id}(id=${product.id})}" class="btn btn-small" sec:authorize="hasAuthority('ROLE_ADMIN')">Edit</a>
+                <form th:action="@{/products/delete/{id}(id=${product.id})}" method="post" class="inline-form" sec:authorize="hasAuthority('ROLE_ADMIN')"
+                      onsubmit="return confirm('Delete this product?');">
+                    <button type="submit" class="btn btn-small btn-danger">Delete</button>
+                </form>
+            </td>
+        </tr>
+        <tr th:if="${#lists.isEmpty(products)}">
+            <td colspan="5" class="empty-state">No products found.</td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>

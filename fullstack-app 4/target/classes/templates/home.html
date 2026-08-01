@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>MrShop</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <script th:src="@{/js/script.js}" defer></script>
+</head>
+<body>
+<div class="bg-blob blob-1"></div>
+<div class="bg-blob blob-2"></div>
+<div class="bg-blob blob-3"></div>
+
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+<div class="container hero hero-compact">
+    <div class="hero-badge">MrShop</div>
+    <h1 class="hero-title">Welcome back, <span sec:authentication="name"></span></h1>
+    <p class="subtitle">Here's your personalized storefront</p>
+
+    <div class="quick-links">
+        <a th:href="@{/products}" class="quick-card">
+            <span class="quick-icon">🛍️</span>
+            <span>Manage Products</span>
+        </a>
+        <a th:href="@{/admin/dashboard}" class="quick-card" sec:authorize="hasAuthority('ROLE_ADMIN')">
+            <span class="quick-icon">📊</span>
+            <span>Admin Dashboard</span>
+        </a>
+    </div>
+</div>
+
+<div class="container">
+    <div class="section-heading">
+        <h2>Latest Products</h2>
+    </div>
+
+    <div class="product-grid">
+        <div class="product-card-3d" th:each="product,iter : ${products}"
+             th:style="'animation-delay: ' + ${iter.index * 80} + 'ms'">
+            <div class="product-card-inner">
+                <div class="product-card-shine"></div>
+                <span class="category-tag" th:if="${product.category}" th:text="${product.category}"></span>
+                <h3 th:text="${product.name}"></h3>
+                <p class="product-desc" th:text="${product.description}"></p>
+                <div class="product-footer">
+                    <span class="product-price" th:text="${'$' + product.price}"></span>
+                    <a th:href="@{/products/{id}(id=${product.id})}" class="btn btn-small btn-primary">View</a>
+                </div>
+            </div>
+        </div>
+        <div class="empty-state" th:if="${#lists.isEmpty(products)}">
+            No products yet — <a th:href="@{/products/new}" sec:authorize="hasAuthority('ROLE_ADMIN')">add the first one</a>.
+        </div>
+    </div>
+</div>
+</body>
+</html>

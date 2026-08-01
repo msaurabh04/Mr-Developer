@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Register</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <script th:src="@{/js/script.js}" defer></script>
+</head>
+<body>
+<div class="bg-blob blob-1"></div>
+<div class="bg-blob blob-2"></div>
+<div class="bg-blob blob-3"></div>
+
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+<div class="container auth-container">
+    <div class="auth-card auth-card-glass">
+        <div class="auth-icon">✨</div>
+        <h2>Create an Account</h2>
+
+        <p class="alert alert-error" th:if="${registrationError}" th:text="${registrationError}"></p>
+
+        <form th:action="@{/register}" th:object="${user}" method="post" class="form">
+            <div class="form-group form-group-float">
+                <label for="fullName">Full Name</label>
+                <input type="text" id="fullName" th:field="*{fullName}">
+                <span class="field-error" th:if="${#fields.hasErrors('fullName')}" th:errors="*{fullName}"></span>
+            </div>
+            <div class="form-group form-group-float">
+                <label for="username">Username</label>
+                <input type="text" id="username" th:field="*{username}">
+                <span class="field-error" th:if="${#fields.hasErrors('username')}" th:errors="*{username}"></span>
+            </div>
+            <div class="form-group form-group-float">
+                <label for="email">Email</label>
+                <input type="email" id="email" th:field="*{email}">
+                <span class="field-error" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></span>
+            </div>
+            <div class="form-group form-group-float">
+                <label for="password">Password</label>
+                <input type="password" id="password" th:field="*{password}">
+                <span class="field-error" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></span>
+                <small class="hint">At least 8 characters, with an uppercase letter, lowercase letter, and a number.</small>
+            </div>
+            <button type="submit" class="btn btn-primary btn-block btn-glow">Register</button>
+        </form>
+
+        <p class="auth-switch">Already have an account? <a th:href="@{/login}">Login here</a></p>
+    </div>
+</div>
+</body>
+</html>

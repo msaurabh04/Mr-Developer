@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Dashboard</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+<div class="container">
+    <h1>Admin Dashboard</h1>
+
+    <div class="stats-grid">
+        <div class="stat-card">
+            <span class="stat-number" th:text="${totalUsers}"></span>
+            <span class="stat-label">Total Users</span>
+        </div>
+        <div class="stat-card">
+            <span class="stat-number" th:text="${totalProducts}"></span>
+            <span class="stat-label">Total Products</span>
+        </div>
+    </div>
+
+    <h2>User Management</h2>
+    <table class="data-table">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Username</th>
+            <th>Full Name</th>
+            <th>Email</th>
+            <th>Role</th>
+            <th>Status</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="user : ${users}">
+            <td th:text="${user.id}"></td>
+            <td th:text="${user.username}"></td>
+            <td th:text="${user.fullName}"></td>
+            <td th:text="${user.email}"></td>
+            <td th:text="${user.role}"></td>
+            <td>
+                <span th:if="${user.enabled}" class="badge badge-success">Active</span>
+                <span th:unless="${user.enabled}" class="badge badge-muted">Disabled</span>
+            </td>
+            <td class="actions">
+                <form th:action="@{/admin/users/{id}/toggle(id=${user.id})}" method="post" class="inline-form">
+                    <button type="submit" class="btn btn-small" th:text="${user.enabled} ? 'Disable' : 'Enable'"></button>
+                </form>
+                <form th:action="@{/admin/users/{id}/delete(id=${user.id})}" method="post" class="inline-form"
+                      th:if="${user.username != 'admin'}"
+                      onsubmit="return confirm('Delete this user?');">
+                    <button type="submit" class="btn btn-small btn-danger">Delete</button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>

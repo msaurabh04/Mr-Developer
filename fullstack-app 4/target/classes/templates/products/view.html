@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${product.name}">Product</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+<div class="container">
+    <div class="detail-card">
+        <h1 th:text="${product.name}"></h1>
+        <p class="category-tag" th:text="${product.category}"></p>
+        <p th:text="${product.description}"></p>
+        <p><strong>Price:</strong> <span th:text="${'$' + product.price}"></span></p>
+        <p><strong>Quantity in stock:</strong> <span th:text="${product.quantity}"></span></p>
+        <p><strong>Last updated:</strong> <span th:text="${product.updatedAt}"></span></p>
+
+        <div class="actions">
+            <a th:href="@{/products}" class="btn btn-secondary">Back to list</a>
+            <a th:href="@{/products/edit/{id}(id=${product.id})}" class="btn btn-primary" sec:authorize="hasAuthority('ROLE_ADMIN')">Edit</a>
+        </div>
+    </div>
+</div>
+</body>
+</html>

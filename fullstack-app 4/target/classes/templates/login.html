@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Login</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <script th:src="@{/js/script.js}" defer></script>
+</head>
+<body>
+<div class="bg-blob blob-1"></div>
+<div class="bg-blob blob-2"></div>
+<div class="bg-blob blob-3"></div>
+
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+<div class="container auth-container">
+    <div class="auth-card auth-card-glass">
+        <div class="auth-icon">🔐</div>
+        <h2>Welcome Back</h2>
+
+        <p class="alert alert-success" th:if="${param.logout}">You have been logged out successfully.</p>
+        <p class="alert alert-success" th:if="${registeredSuccessfully}">Registration successful! Please log in.</p>
+        <p class="alert alert-error" th:if="${param.error}">Invalid username or password.</p>
+
+        <form th:action="@{/login}" method="post" class="form">
+            <div class="form-group form-group-float">
+                <label for="username">Username</label>
+                <input type="text" id="username" name="username" required autofocus>
+            </div>
+            <div class="form-group form-group-float">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" required>
+            </div>
+            <button type="submit" class="btn btn-primary btn-block btn-glow">Login</button>
+        </form>
+
+        <p class="auth-switch">Don't have an account? <a th:href="@{/register}">Register here</a></p>
+        <p class="auth-hint">Demo admin login: <strong>admin</strong> / <strong>Admin@123</strong></p>
+    </div>
+</div>
+</body>
+</html>
